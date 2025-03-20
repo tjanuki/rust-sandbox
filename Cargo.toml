@@ -8,7 +8,7 @@ edition = "2021"
 actix-web = "4.4"
 
 # Database
-diesel = { version = "2.1", features = ["mysql", "r2d2"] }
+diesel = { version = "2.1", features = ["sqlite", "r2d2"] }
 dotenvy = "0.15"    # For loading environment variables from .env file
 
 # Serialization/deserialization
