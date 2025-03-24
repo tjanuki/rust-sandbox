@@ -62,3 +62,19 @@ pub async fn create_user(
         Err(_) => HttpResponse::InternalServerError().body("Error creating user"),
     }
 }
+
+pub async fn delete_user(path: web::Path<i32>, pool: web::Data<DbPool>) -> impl Responder {
+    let user_id = path.into_inner();
+    let mut conn = match pool.get() {
+        Ok(conn) => conn,
+        Err(_) => return HttpResponse::InternalServerError().body("Database connection error"),
+    };
+
+    let result = diesel::delete(users.find(user_id)).execute(&mut conn);
+
+    match result {
+        Ok(num) if num > 0 => HttpResponse::Ok().body("User deleted successfully"),
+        Ok(_) => HttpResponse::NotFound().body("User not found"),
+        Err(_) => HttpResponse::InternalServerError().body("Error deleting user"),
+    }
+}
