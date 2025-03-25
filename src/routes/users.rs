@@ -3,6 +3,7 @@ use crate::models::user::{NewUser, User};
 use crate::schema::users::dsl::*;
 use actix_web::{web, HttpResponse, Responder};
 use diesel::prelude::*;
+use validator::Validate;
 
 pub async fn get_users(pool: web::Data<DbPool>) -> impl Responder {
     let mut conn = match pool.get() {
@@ -38,6 +39,11 @@ pub async fn create_user(
     new_user: web::Json<NewUser>,
     pool: web::Data<DbPool>,
 ) -> impl Responder {
+    // Validate the new user data
+    if let Err(errors) = new_user.validate() {
+        return HttpResponse::BadRequest().json(errors);
+    }
+
     let mut conn = match pool.get() {
         Ok(conn) => conn,
         Err(_) => return HttpResponse::InternalServerError().body("Database connection error"),
