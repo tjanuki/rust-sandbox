@@ -9,6 +9,7 @@ actix-web = "4.4"
 
 # Database
 diesel = { version = "2.1", features = ["sqlite", "r2d2"] }
+diesel_migrations = { version = "2.1.0", features = ["sqlite"] }
 dotenvy = "0.15"    # For loading environment variables from .env file
 
 # Serialization/deserialization
@@ -24,3 +25,7 @@ tokio = { version = "1.35", features = ["full"] }
 # Logging
 log = "0.4"
 env_logger = "0.10"
+
+[dev-dependencies]
+actix-rt = "2.9"
+diesel_migrations = { version = "2.1.0", features = ["sqlite"] }
