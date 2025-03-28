@@ -4,6 +4,7 @@ use crate::schema::users::dsl::*;
 use actix_web::{web, HttpResponse, Responder};
 use diesel::prelude::*;
 use validator::Validate;
+use serde_json;
 
 pub async fn get_users(pool: web::Data<DbPool>) -> impl Responder {
     let mut conn = match pool.get() {
@@ -83,4 +84,11 @@ pub async fn delete_user(path: web::Path<i32>, pool: web::Data<DbPool>) -> impl 
         Ok(_) => HttpResponse::NotFound().body("User not found"),
         Err(_) => HttpResponse::InternalServerError().body("Error deleting user"),
     }
+}
+
+pub async fn get_protected_resource() -> impl Responder {
+    HttpResponse::Ok().json(serde_json::json!({
+        "message": "This is a protected resource",
+        "status": "success"
+    }))
 }
